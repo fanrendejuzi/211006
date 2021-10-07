@@ -1,0 +1,84 @@
+@@ -0,0 +1,83 @@
+//
+//  不健壮机器人.cpp
+//  10.6
+//
+//  Created by 刘子钰 on 2021/10/6.
+//
+
+#include "不健壮机器人.hpp"
+#include<iostream>
+#include<map>
+using namespace std;
+int mat[22][22];
+bool vis[22][22];
+int dir[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+int main()
+{
+    int n, m, i, j, k, l, q, max = -1, maxi, ans = 0, max2 = 0;
+    bool flag = false, flag2 = false;
+    cin >> n >> m >> q;
+    for(i = 1; i <= n; i ++)
+    {
+        for(j = 1; j <= m; j ++)
+        {
+            cin >> mat[i][j];
+        }
+    }
+    for(i = 1; i <= n; i ++)
+    {
+        for(j = 1; j <= m; j ++)
+        {
+            int curi = i;
+            int curj = j;
+            vis[i][j] = true;
+            for(k = 1; k <= q; k ++)
+            {
+                ans += mat[curi][curj];
+                for(l = 0; l <= 3; l ++)
+                {
+                    if(curi + dir[l][0] > m || curi + dir[l][0] < 1 || curj + dir[l][1] > n || curj + dir[l][1] < 1)
+                    {
+                        continue;
+                    }
+                    if(mat[curi + dir[l][0]][curj + dir[l][1]] > max && vis[curi + dir[l][0]][curj + dir[l][1]] == false)
+                    {
+                        flag = true;
+                        max = mat[curi + dir[l][0]][curj + dir[l][1]];
+                        maxi = l;
+                        continue;
+                    }
+                    if(mat[curi + dir[l][0]][curj + dir[l][1]] == max && vis[curi + dir[l][0]][curj + dir[l][1]] == false && flag == true)
+                    {
+                        flag2 = true;
+                        break;
+                    }
+                }
+                if(flag2 == true)
+                {
+                    flag2 = false;
+                    break;
+                }
+                flag = false;
+                max = 0;
+                curi += dir[maxi][0];
+                curj += dir[maxi][1];
+                vis[curi][curj] = true;
+            }
+            if(ans > max2)
+            {
+                max2 = ans;
+            }
+            ans = 0;
+            for(k = 1; k <= n; k ++)
+            {
+                for(l = 1; l <= m; l ++)
+                {
+                    vis[k][l] = false;
+                }
+            }
+        }
+    }
+    cout << max2 << endl;
+    return 0;
+}
